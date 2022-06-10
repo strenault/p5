@@ -2,51 +2,48 @@
  * Gère l'affichage et les interactions de la Product
  */
 //récupératin de l'id kanap
-const produit = window.location.search.split("?id=").join("");
+const produits = window.location.search.split("?id=").join("");
+console.log(produits);
 let produitData = [];
 
-// Récupération des articles de l'API
-const ficheProduit = async () => {
-    await produitData
+// Insertion de l'élément "article"
+const apiProduit = async () => {
+    await fetch(`http://localhost:3000/api/products/${produits}`)
         .then((res) => res.json())
         .then((promise) => {
             produitData = promise;
-            const article = ficheProduit;
-            console.table(articles);
-            for (let article in articles) {
+            console.log(produitData);
+        });
+
+};
+// Répartition des données de l'API dans le DOM
+// Répartition des données de l'API dans le DO
+async function fillSection() {
+    var result = await apiProduit()
+        .then(function (resultatApiProduit) {
+            const articles = produitData;
+            console.table(produitData);
+            for (let produitData in articles) {
+
+                // Insertion de l'élément "a"
+                let productMain = document.createElement("article");
+                document.querySelector(".item").appendChild(productMain);
+
 
                 // Insertion de l'élément "article"
-                let productArticle = document.createElement("article");
-                productLink.appendChild(productArticle);
-                console.log(article);
-
+                let productProduit = document.createElement("Produit");
+                productMain.appendChild(productProduit);
                 // Insertion de l'image
                 let productImg = document.createElement("img");
-                console.log(img);
-                productArticle.appendChild(item_img);
-                productImg.src = ficheProduit[article].imageUrl;
-                productImg.alt = ficheProduit[article].altTxt;
+                productProduit.appendChild(productImg);
+                productImg.src = [produitData].imageUrl;
+                productImg.alt = [produitData].altTxt;
 
-
-                // Insertion du titre "h1"
-                let productName = document.createElement("h1");
-                productArticle.appendChild(productName);
-                productName.classList.add("productName");
-                productName.innerHTML = resultatAPI[article].name;
-
-                // Insertion de la description "p"
-                let productDescription = document.createElement("p");
-                productArticle.appendChild(item__content__description__title);
-                item__content__description__title.classList.add("productName");
-                item__content__description__title.innerHTML = resultatAPI[article].description;
-            }
-        })
-        .catch((erreur) => console.log('Accès aux Produits impossible'))
+            };
+        });
 };
-
-
-
-
-
-
-// Répartition des données de l'API dans le DOM
+fillSection();
+    // Insertion de l'élément "article"
+    // Insertion de l'élément "a"
+    // Insertion de l'élément "article"
+    // Insertion de l'image
