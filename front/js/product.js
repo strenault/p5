@@ -25,19 +25,19 @@ async function fillSection() {
             console.table(produitData);
             for (let produitData in articles) {
 
-                // Insertion de l'élément "a"
-                let productMain = document.createElement("article");
-                document.querySelector(".item").appendChild(productMain);
-
-
                 // Insertion de l'élément "article"
-                let productProduit = document.createElement("Produit");
+                let productMain = document.createElement("articles");
+                document.querySelector(".item").appendChild(productMain);
+                productMain.href = `http://localhost:3000/api/products/${produitData}`;
+
+                // Insertion de l'élément "produit"
+                let productProduit = document.createElement("ProduitData");
                 productMain.appendChild(productProduit);
                 // Insertion de l'image
                 let productImg = document.createElement("img");
                 productProduit.appendChild(productImg);
-                productImg.src = [produitData].imageUrl;
-                productImg.alt = [produitData].altTxt;
+                productImg.src = articles.imageUrl;
+                productImg.alt = articles.altTxt;
 
             };
         });
