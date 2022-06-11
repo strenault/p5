@@ -1,49 +1,31 @@
-/**
- * Gère l'affichage et les interactions de la Product
- */
-//récupératin de l'id kanap
-const produits = window.location.search.split("?id=").join("");
-console.log(produits);
-let produitData = [];
+var str = window.location.href;
+var url = new URL(str);
+var idProduct = url.searchParams.get("id");
+console.log(idProduct);
+getArticle();
 
-// Insertion de l'élément "article"
-const apiProduit = async () => {
-    await fetch(`http://localhost:3000/api/products/${produits}`)
-        .then((res) => res.json())
-        .then((promise) => {
-            produitData = promise;
-            console.log(produitData);
-        });
+function getArticle() {
+    fetch(`http://localhost:3000/api/products/${idProduct}`)
+        .then((res) => {
+            return res.json();
+        })
 
-};
-// Répartition des données de l'API dans le DOM
-// Répartition des données de l'API dans le DO
-async function fillSection() {
-    var result = await apiProduit()
-        .then(function (resultatApiProduit) {
-            const articles = produitData;
-            console.table(produitData);
-            for (let produitData in articles) {
+        // Répartition des données de l'API dans le DOM
+        .then(async function (resultatAPI) {
+            article = await resultatAPI;
+            console.log("ok");
+            console.log(resultatAPI);
+            if (article) {
+                getproduit(article);
+            }
 
-                // Insertion de l'élément "article"
-                let productMain = document.createElement("articles");
-                document.querySelector(".item").appendChild(productMain);
-                productMain.href = `http://localhost:3000/api/products/${produitData}`;
+        })
+        .catch((error) => {
+            console.log("Erreur de la requête API");
+        })
+}
+function getproduit(article) {
+    console.log(article);
 
-                // Insertion de l'élément "produit"
-                let productProduit = document.createElement("ProduitData");
-                productMain.appendChild(productProduit);
-                // Insertion de l'image
-                let productImg = document.createElement("img");
-                productProduit.appendChild(productImg);
-                productImg.src = articles.imageUrl;
-                productImg.alt = articles.altTxt;
 
-            };
-        });
-};
-fillSection();
-    // Insertion de l'élément "article"
-    // Insertion de l'élément "a"
-    // Insertion de l'élément "article"
-    // Insertion de l'image
+}
