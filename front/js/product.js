@@ -13,19 +13,34 @@ function getArticle() {
         // Répartition des données de l'API dans le DOM
         .then(async function (resultatAPI) {
             article = await resultatAPI;
-            console.log("ok");
             console.log(resultatAPI);
             if (article) {
                 getproduit(article);
             }
 
-        })
-        .catch((error) => {
+            for (let idProduct in article) {
+                // Insertion de l'élément "article"
+                let productArticle = document.createElement("article");
+                document.querySelector(".item").appendChild(productArticle);
+                productArticle.href = `http://localhost:3000/api/products/${resultatAPI}`;
+
+                // Insertion de l'élément "produit"
+                let productProduit = document.createElement("produit");
+                productArticle.appendChild(productProduit);
+
+                // Insertion de l'image
+                let productImg = document.createElement("img");
+                productProduit.appendChild(productImg);
+                productImg.src = article.imageUrl;
+                productImg.alt = article.altTxt;
+
+            }
+
+
+        }).catch((error) => {
             console.log("Erreur de la requête API");
         })
 }
 function getproduit(article) {
     console.log(article);
-
-
-}
+};

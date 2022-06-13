@@ -46,6 +46,17 @@ async function fillSection() {
         });
 };
 fillSection();
+var iNodeList = document.getElementsByClassName('item').getElementsByClassName('article');
+if (iNodeList > 0) {
+    var oNodeList = item.getElementsByClassName("*");
+    if (oNodeList.lenght > 0) {
+        console.log(iNodeList);
+    } else {
+        /*non trouvé*/
+    }
+} else {
+    /*message"item non touvé"*/
+}
     // Insertion de l'élément "article"
     // Insertion de l'élément "a"
     // Insertion de l'élément "article"
