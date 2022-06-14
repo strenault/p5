@@ -20,26 +20,38 @@ function getArticle() {
 
             for (let idProduct in article) {
                 // Insertion de l'élément "article"
-                let productArticle = document.createElement("article");
-                document.querySelector(".item").appendChild(productArticle);
-                productArticle.href = `http://localhost:3000/api/products/${resultatAPI}`;
+                let productItem = document.createElement("item");
+                document.querySelector(".limitedWidthBlock").appendChild(productItem);
+                productItem.href = `http://localhost:3000/api/products/${resultatAPI}`;
 
-                // Insertion de l'élément "produit"
-                let productProduit = document.createElement("produit");
-                productArticle.appendChild(productProduit);
+                // Insertion de l'élément "article"
+                let productArticle = document.createElement("article");
+                productItem.appendChild(productArticle);
 
                 // Insertion de l'image
                 let productImg = document.createElement("img");
-                productProduit.appendChild(productImg);
+                productArticle.appendChild(productImg);
                 productImg.src = article.imageUrl;
                 productImg.alt = article.altTxt;
+                document.querySelector('.item__img').appendChild(productImg);
 
-            }
+                let productName = document.createElement("h1");
+                productName.setAttribute("#title");
+                productArticle.appendChild(productName);
+                productName = article.name;
+                document.querySelector('.item__content__titlePrice').appendChild(productName);
+
+
+
+
+
+
+            };
 
 
         }).catch((error) => {
             console.log("Erreur de la requête API");
-        })
+        });
 }
 function getproduit(article) {
     console.log(article);
