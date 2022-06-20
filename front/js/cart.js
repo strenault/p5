@@ -85,27 +85,52 @@ function produitpanier() {
             productQuantity.setAttribute("max", "100");
             productQuantity.setAttribute("name", "itemQuantity");
 
+            //insertion de l'élément div
+            let productItemContentSettingsDelete = document.createElement("div");
+            productItemContentSettings.appendChild(productItemContentSettingsDelete);
+            productItemContentSettingsDelete.className = "cart__item__content__settings__delete";
+
+
+            let productSup = document.createElement("p");
+            productItemContentSettingsDelete.appendChild(productSup);
+            productSup.className = "deleteItem";
+            productSup.id = produitLocalStorage[produit].idProduit;
+            console.log(productSup.id);
+            productSup.couleur = produitLocalStorage[produit].couleurProduit;
+            console.log(productSup.couleur);
+            productSup.innerHTML += `<p class="deleteItem" onclick="deleteItem(' ${productSup.id} ',' ${productSup.couleur} ')">Supprimer</p>`;
 
 
 
-        }
+            // si le panier est null
+            function getCart() {
+                let items = [];
+                if (localStorage.getItem("panier") != null) {
+                    items = JSON.parse(localStorage.getItem("panier"));
+                }
+                return items;
+            }
+            // Dans LocalStorage : suppression de l'article sélectionné 
+            function deleteItem(id, color) {
+                let items = getCart();
+                for (i = 0; i < items.length; i++) {
+                    if (idProduit === items[i][0] && couleurProduit === items[i][1]) {
+                        items.splice(i, 1);
+                        localStorage.setItem("panier", JSON.stringify(items));
+                        window.location.reload();
+                    }
+                }
+            }
+
+        };
+
 
     }
 
 
-}
-
-
-function getTotals() {
 
 }
-getTotals();
 
-function modifyQuatity() {
 
-}
-modifyQuatity();
-function deleteQuantity() {
 
-}
-deleteQuantity()
+
