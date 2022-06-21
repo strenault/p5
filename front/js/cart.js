@@ -4,7 +4,7 @@
 //Initialisation du local storage
 let produitLocalStorage = JSON.parse(localStorage.getItem("produit"));
 const PosEmptyCarty = document.querySelector('#cart__items');
-
+const PosEmptyCart = document.querySelector('.cart');
 produitpanier();
 
 function produitpanier() {
@@ -20,7 +20,7 @@ function produitpanier() {
             let productArticle = document.createElement("article");
             document.querySelector("#cart__items").appendChild(productArticle);
             productArticle.className = "cart__item";
-            productArticle.setAttribute('data-id', produitLocalStorage[produit].idProduit)
+            productArticle.setAttribute('data-id', produitLocalStorage[produit].idProduit);
 
             // insertion de div qui contient la photo
             let productDivImg = document.createElement("div");
@@ -85,52 +85,175 @@ function produitpanier() {
             productQuantity.setAttribute("max", "100");
             productQuantity.setAttribute("name", "itemQuantity");
 
-            //insertion de l'élément div
+
+            // Insertion de l'élément "div"
             let productItemContentSettingsDelete = document.createElement("div");
             productItemContentSettings.appendChild(productItemContentSettingsDelete);
             productItemContentSettingsDelete.className = "cart__item__content__settings__delete";
 
+            // Insertion de "p" supprimer
+            let productSupprimer = document.createElement("p");
+            productItemContentSettingsDelete.appendChild(productSupprimer);
+            productSupprimer.className = "deleteItem";
+            productSupprimer.innerHTML = "Supprimer";
+            productSupprimer.addEventListener("click", (e) => {
+                e.preventDefault;
 
-            let productSup = document.createElement("p");
-            productItemContentSettingsDelete.appendChild(productSup);
-            productSup.className = "deleteItem";
-            productSup.id = produitLocalStorage[produit].idProduit;
-            console.log(productSup.id);
-            productSup.couleur = produitLocalStorage[produit].couleurProduit;
-            console.log(productSup.couleur);
-            productSup.innerHTML += `<p class="deleteItem" onclick="deleteItem(' ${productSup.id} ',' ${productSup.couleur} ')">Supprimer</p>`;
+                // enregistrer l'id et la couleur séléctionnés par le bouton supprimer
+                let deleteId = produitLocalStorage[produit].idProduit;
+                let deleteColor = produitLocalStorage[produit].colorProduit;
 
+                // filtrer l'élément cliqué par le bouton supprimer
+                productLocalStorage = produitLocalStorage.filter(elt => elt.idProduit !== deleteId || elt.colorProduit !== deleteColor);
 
+                // envoyer les nouvelles données dans le localStorage
+                localStorage.setItem('cart', JSON.stringify(produitLocalStorage));
 
-            // si le panier est null
-            function getCart() {
-                let items = [];
-                if (localStorage.getItem("panier") != null) {
-                    items = JSON.parse(localStorage.getItem("panier"));
+                // avertir de la suppression et recharger la page
+                alert('Votre article a bien été supprimé.');
+
+                //Si pas de produits dans le local storage on affiche que le panier est vide
+                if (produitLocalStorage.length === 0) {
+                    localStorage.clear();
                 }
-                return items;
-            }
-            // Dans LocalStorage : suppression de l'article sélectionné 
-            function deleteItem(id, color) {
-                let items = getCart();
-                for (i = 0; i < items.length; i++) {
-                    if (idProduit === items[i][0] && couleurProduit === items[i][1]) {
-                        items.splice(i, 1);
-                        localStorage.setItem("panier", JSON.stringify(items));
-                        window.location.reload();
-                    }
-                }
-            }
-
-        };
-
-
+                //Refresh rapide de la page
+                location.reload();
+            });
+        }
     }
+    //Création de cart
+    const Cart = document.querySelector('.cart');
+
+    let productPanier = document.createElement("produit");
+    document.querySelector(".cart").appendChild(productPanier);
+    productPanier.className = "cart";
+
+    let productDivCart = document.createElement('div');
+    productPanier.appendChild(productDivCart);
+    productDivCart.className = "cart__price";
 
 
+    let productTotalQ = document.createElement('span');
+    productPanier.appendChild(productTotalQ);
+    productTotalQ.setAttribute("totalQuantity", "id");
+
+
+    let productTotalPrix = document.createElement('span');
+    productPanier.appendChild(productTotalPrix);
+    productTotalPrix.setAttribute("totalPrice", "id");
 
 }
 
+function modifyQtt() {
+    let qttModif = document.querySelectorAll(".itemQuantity");
+
+    for (let k = 0; k < qttModif.length; k++) {
+        qttModif[k].addEventListener("change", (event) => {
+            event.preventDefault();
+
+            //Selection de l'element à modifier en fonction de son id ET sa couleur
+            let quantityModif = produitLocalStorage[produit].quantiteProduit;
+            let qttModifValue = qttModif[produit].valueAsNumber;
+
+            const resultFind = produitLocalStorage.find((el) => el.qttModifValue !== quantityModif);
+
+            resultFind.qtyKanap = qttModifValue;
+            produitLocalStorage[produit].quantiteProduit = resultFind.quantiteProduit
+
+            localStorage.setItem("cart", JSON.stringify(produitLocalStorage));
+
+            // refresh rapide
+            location.reload();
+        })
+    }
+}
+modifyQtt();
+
+
+function getTotals() {
+
+    // Récupération du total des quantités
+    var elemsQtt = document.getElementsByClassName('itemQuantity');
+    var myLength = elemsQtt.length,
+        totalQtt = 0;
+
+    for (var i = 0; i < myLength; ++i) {
+        totalQtt += elemsQtt[i].valueAsNumber;
+    }
+
+    let productTotalQuantity = document.getElementById('totalQuantity');
+    productTotalQuantity.innerHTML = totalQtt;
+
+    // Récupération du prix total
+    totalPrice = 0;
+    for (var i = 0; i < myLength; ++i) {
+        totalPrice += (elemsQtt[i].valueAsNumber * qttModif[produit].valueAsNumber);
+    }
+
+    let productTotalPrice = document.getElementById('totalPrice');
+    productTotalPrice.innerHTML = totalPrice;
+}
+
+
+
+
+
+const prenom = document.getElementById("firstName");
+const nom = document.getElementById("lastName");
+const ville = document.getElementById("city");
+const adresse = document.getElementById("address");
+const mail = document.getElementById("email");
+
+
+
+// email
+const emailErrorMsg = document.getElementById("emailErrorMsg");
+function validateEmail(mail) {
+    const regexMail =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (regexMail.test(mail) == false) {
+        return false;
+    } else {
+        emailErrorMsg.innerHTML = null;
+        return true;
+    }
+}
+// pour les noms : caractères acceptés par RegEx
+
+const regexName = /^[a-z][a-z '-.,]{1,31}$|^$/i;
+
+// prenom
+const firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+function validateFirstName(prenom) {
+    if (regexName.test(prenom) == false) {
+        return false;
+    } else {
+        firstNameErrorMsg.innerHTML = null;
+        return true;
+    }
+}
+
+// nom
+const lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+function validateLastName(nom) {
+    if (regexName.test(nom) == false) {
+        return false;
+    } else {
+        lastNameErrorMsg.innerHTML = null;
+        return true;
+    }
+}
+
+// ville
+const cityErrorMsg = document.getElementById("cityErrorMsg");
+function validateCity(ville) {
+    if (regexName.test(ville) == false) {
+        return false;
+    } else {
+        cityErrorMsg.innerHTML = null;
+        return true;
+    }
+}
 
 
 
