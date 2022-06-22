@@ -3,8 +3,8 @@
  */
 //Initialisation du local storage
 let produitLocalStorage = JSON.parse(localStorage.getItem("produit"));
-const PosEmptyCarty = document.querySelector('#cart__items');
-const PosEmptyCart = document.querySelector('.cart');
+const PosEmptyCarty = document.querySelector('.cart');
+
 produitpanier();
 
 function produitpanier() {
@@ -17,10 +17,19 @@ function produitpanier() {
     // s'il y' a des produits
     else {
         for (let produit in produitLocalStorage) {
+            let productPanier = document.createElement("panier");
+            document.querySelector(".cart").appendChild(productPanier);
+            productPanier.className = "cart";
+
+            // insertion de div qui contient la photo
+            let productDivArt = document.createElement("div");
+            productPanier.appendChild(productDivArt);
+            productDivArt.className = "cart__items";
+            productDivArt.setAttribute('data-id', produitLocalStorage[produit].idProduit);
+
             let productArticle = document.createElement("article");
-            document.querySelector("#cart__items").appendChild(productArticle);
-            productArticle.className = "cart__item";
-            productArticle.setAttribute('data-id', produitLocalStorage[produit].idProduit);
+            productPanier.appendChild(productArticle);
+
 
             // insertion de div qui contient la photo
             let productDivImg = document.createElement("div");
@@ -101,16 +110,17 @@ function produitpanier() {
 
                 // enregistrer l'id et la couleur séléctionnés par le bouton supprimer
                 let deleteId = produitLocalStorage[produit].idProduit;
-                let deleteColor = produitLocalStorage[produit].colorProduit;
+                let deleteColor = produitLocalStorage[produit].couleurProduit;
 
                 // filtrer l'élément cliqué par le bouton supprimer
-                productLocalStorage = produitLocalStorage.filter(elt => elt.idProduit !== deleteId || elt.colorProduit !== deleteColor);
+                produitLocalStorage = produitLocalStorage.filter(elt => elt.idProduit !== deleteId || elt.couleurProduit !== deleteColor);
 
                 // envoyer les nouvelles données dans le localStorage
                 localStorage.setItem('cart', JSON.stringify(produitLocalStorage));
 
                 // avertir de la suppression et recharger la page
                 alert('Votre article a bien été supprimé.');
+                location.reload();
 
                 //Si pas de produits dans le local storage on affiche que le panier est vide
                 if (produitLocalStorage.length === 0) {
@@ -119,30 +129,32 @@ function produitpanier() {
                 //Refresh rapide de la page
                 location.reload();
             });
+
+            let productDivCart = document.createElement('div');
+            productPanier.appendChild(productDivCart);
+            productDivCart.className = "cart__price";
+
+            let productCartPrice = document.createElement('carte__price');
+            productDivCart.appendChild(productCartPrice);
+            productCartPrice.className = "cart__price";
+
+
+            let productTotalQ = document.createElement('span');
+            productCartPrice.appendChild(productTotalQ);
+            productTotalQ.setAttribute("totalQuantity", "id");
+
+
+            let productTotalPrix = document.createElement('span');
+            productCartPrice.appendChild(productTotalPrix);
+            productTotalPrix.setAttribute("totalPrice", "id");
         }
     }
     //Création de cart
-    const Cart = document.querySelector('.cart');
 
-    let productPanier = document.createElement("produit");
-    document.querySelector(".cart").appendChild(productPanier);
-    productPanier.className = "cart";
-
-    let productDivCart = document.createElement('div');
-    productPanier.appendChild(productDivCart);
-    productDivCart.className = "cart__price";
-
-
-    let productTotalQ = document.createElement('span');
-    productPanier.appendChild(productTotalQ);
-    productTotalQ.setAttribute("totalQuantity", "id");
-
-
-    let productTotalPrix = document.createElement('span');
-    productPanier.appendChild(productTotalPrix);
-    productTotalPrix.setAttribute("totalPrice", "id");
 
 }
+
+
 
 function modifyQtt() {
     let qttModif = document.querySelectorAll(".itemQuantity");
@@ -158,9 +170,9 @@ function modifyQtt() {
             const resultFind = produitLocalStorage.find((el) => el.qttModifValue !== quantityModif);
 
             resultFind.qtyKanap = qttModifValue;
-            produitLocalStorage[produit].quantiteProduit = resultFind.quantiteProduit
+            produitLocalStorage[cart].quantiteProduit = resultFind.qtyKanat;
 
-            localStorage.setItem("cart", JSON.stringify(produitLocalStorage));
+            localStorage.setItem("cart", JSON.stringify(cartLocalStorage));
 
             // refresh rapide
             location.reload();
@@ -180,18 +192,22 @@ function getTotals() {
     for (var i = 0; i < myLength; ++i) {
         totalQtt += elemsQtt[i].valueAsNumber;
     }
+    //Récupération du prix de l'article
 
-    let productTotalQuantity = document.getElementById('totalQuantity');
-    productTotalQuantity.innerHTML = totalQtt;
+    let prixcart = cartLocalStorage[cart].prixProduit;
+
+
+    let cartTotalQuantity = document.getElementById('totalQuantity');
+    cartTotalQuantity.innerHTML = totalQtt;
 
     // Récupération du prix total
     totalPrice = 0;
     for (var i = 0; i < myLength; ++i) {
-        totalPrice += (elemsQtt[i].valueAsNumber * qttModif[produit].valueAsNumber);
+        totalPrice += (elemsQtt[i].valueAsNumber * prixcart);
     }
 
-    let productTotalPrice = document.getElementById('totalPrice');
-    productTotalPrice.innerHTML = totalPrice;
+    let cartTotalPrice = document.getElementById('totalPrice');
+    cartTotalPrice.innerHTML = totalPrice;
 }
 
 
