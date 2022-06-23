@@ -15,11 +15,7 @@ function getArticle() {
         // Répartition des données de l'API dans le DOM
         .then(async function (resultatAPI) {
             article = await resultatAPI;
-            //*console.log(resultatAPI);
-            //if (article) {
-            //getproduit(article);
-            //}
-            //console.log(article);
+
             //insertion de l'image
             let productImg = document.createElement("img");
             document.querySelector(".item__img").appendChild(productImg);

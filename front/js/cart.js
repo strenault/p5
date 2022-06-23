@@ -17,7 +17,7 @@ function getCart() {
             // Insertion de l'élément "article"
             let productArticle = document.createElement("article");
             document.querySelector("#cart__items").appendChild(productArticle);
-            productArticle.className = "cart__item";
+            productArticle.className = "cart__items";
             productArticle.setAttribute('data-id', produitLocalStorage[produit].idProduit);
 
             // Insertion de l'élément "div"
